@@ -63,6 +63,9 @@ extern int mmap_rnd_compat_bits __read_mostly;
 /* to align the pointer to the (next) page boundary */
 #define PAGE_ALIGN(addr) ALIGN(addr, PAGE_SIZE)
 
+/* test whether an address (unsigned long or pointer) is aligned to PAGE_SIZE */
+#define PAGE_ALIGNED(addr)	IS_ALIGNED((unsigned long)addr, PAGE_SIZE)
+
 /*
  * Linux kernel virtual memory manager primitives.
  * The idea being to have a "virtual" mm in the same way
@@ -1744,20 +1747,6 @@ static inline bool page_is_guard(struct page *page)
 static inline unsigned int debug_guardpage_minorder(void) { return 0; }
 static inline bool page_is_guard(struct page *page) { return false; }
 #endif /* CONFIG_DEBUG_PAGEALLOC */
-
-#ifdef CONFIG_PROCESS_RECLAIM
-struct reclaim_param {
-	struct vm_area_struct *vma;
-	/* Number of pages scanned */
-	int nr_scanned;
-	/* max pages to reclaim */
-	int nr_to_reclaim;
-	/* pages reclaimed */
-	int nr_reclaimed;
-};
-extern struct reclaim_param reclaim_task_anon(struct task_struct *task,
-		int nr_to_reclaim);
-#endif
 
 #endif /* __KERNEL__ */
 #endif /* _LINUX_MM_H */
